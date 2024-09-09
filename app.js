@@ -4,10 +4,20 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const router = require('./routes/index');
+
+// Rotas
+const publicRoutes = require('./routes/public')
 
 var app = express();
+
+// Rotas
+// Pública - Cadastro & Login
+
+// Privado - Listar Usuários
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
