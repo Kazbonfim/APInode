@@ -1,0 +1,41 @@
+MDB 
+kazbonfim || ULnseg83rd4KK7Na
+
+mongodb+srv://kazbonfim:ULnseg83rd4KK7Na@user.rocwk.mongodb.net/?retryWrites=true&w=majority&appName=User
+
+
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://kazbonfim:ULnseg83rd4KK7Na@user.rocwk.mongodb.net/?retryWrites=true&w=majority&appName=User";
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+run().catch(console.dir);
+
+// Comandos úteis
+[1]: npm install prisma --save-dev :: Instala o Prisma como dependência de desenvolvimento
+[2]: npx prisma init :: Inicializa o Prisma e cria arquivos de configuração
+[2.1]: Importante configurar o endereço no arquivo '.env', e também definir o Schema no arquivo 'prisma/schema.prisma' :: Configuração adicional necessária após a inicialização
+[3]: npm install @prisma/client :: Instala o cliente Prisma para interagir com o banco de dados
+[4]: npx prisma db push :: Aplica as alterações do schema ao banco de dados
+[5]: npx prisma studio :: Abre o Prisma Studio para visualizar e gerenciar dados do banco
+
+
