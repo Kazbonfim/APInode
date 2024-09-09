@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const bcrypt = require('bcrypt');
-const { PrismaClient } = require('@prisma/client'); 
+const { PrismaClient } = require('@prisma/client');
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
+
 // Cadastro
 router.post('/cadastro', async (req, res) => {
 
@@ -20,11 +21,41 @@ router.post('/cadastro', async (req, res) => {
                 password: hashPassword,
             },
         })
-        
+
         res.status(201).json(userDB); // Sucesso!
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Erro no servidor, tente novamente." });
+    }
+})
+
+// Login
+router.post('/login', async (req, res) => {
+
+    try {
+        const userInfo = req.body;
+
+        const user = await prisma.user.findUnique({
+            where: { email: userInfo.email, },
+        })
+
+        res.status(200).json(user);
+
+        if (!user) {
+            return res.status(404).json({ message: "Usuário não encontrado, tente novamente ou crie uma conta." })
+        }
+
+        const isMatch = await bcrypt.compare(userInfo.password, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({ message: "Senha inválida." });
+        }
+
+        next(error);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Erro no servidor, tente novamente" })
     }
 })
 
