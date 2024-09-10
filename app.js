@@ -7,6 +7,7 @@ var logger = require('morgan');
 
 var app = express();
 
+// Default
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -16,7 +17,7 @@ var usersRouter = require('./routes/users');
 const publicRoutes = require('./routes/public');
 
 // Privado - Listar Usuários
-
+const privateRoutes = require('./routes/private');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/', publicRoutes);
+app.use('/', privateRoutes);
 app.use('/users', usersRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
