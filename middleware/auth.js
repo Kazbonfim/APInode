@@ -1,29 +1,33 @@
 const jwt = require("jsonwebtoken");
+// const env = require('dotenv').config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const auth = (req, res, next) => {
 
-    // https://www.youtube.com/watch?v=94FonmsT27s > 1:10:12
     const token = req.headers.authorization;
+
     console.log(token);
-    
 
     if (!token) {
-        console.log("Ops! 😭");
-        
-        return res.status(401).json({ message: "Acesso negado" })
+        return res.status(401).json({ message: "Acesso negado" });
     }
 
     try {
 
-        const decoded = jwt.verify(token.replace('Bearer ', ''), JWT_SECRET);
-
-        req.userId = decoded.id;    
+        // Remove o prefixo 'Bearer ' se presente
+        const tokenValue = token.replace('Bearer ', '');
+        console.log('Token sem Bearer: ' + tokenValue);
+        
+        const decoded = jwt.verify(tokenValue, JWT_SECRET);
+        console.log('Token decodificado: ' + decoded);
+        
+        // Atribui o ID do usuário ao req.userId
+        req.userId = decoded.id;
 
     } catch (error) {
-        console.log(error + "😭");
-        return res.status(401).json({ message: "Token inválido!" })
+        console.log("Erro na validação do token:", error.message);
+        return res.status(401).json({ message: "Token inválido!", error: error.message });
     }
 
     next();

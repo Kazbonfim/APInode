@@ -1,3 +1,5 @@
+require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -7,6 +9,7 @@ const auth = require('./middleware/auth');
 
 
 var app = express();
+
 
 // Default
 var indexRouter = require('./routes/index');
@@ -34,6 +37,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/', publicRoutes);
 app.use('/', auth, privateRoutes);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
