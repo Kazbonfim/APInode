@@ -6,7 +6,9 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-router.get('/listar-usuarios', async (req, res) => {
+const auth = require('../middleware/auth');
+
+router.get('/listar-usuarios', auth, async (req, res) => {
 
     try {
 
@@ -20,8 +22,9 @@ router.get('/listar-usuarios', async (req, res) => {
         });
 
         res.status(200).json({ message: "Usuários listados com sucesso: ", users })
-
+        
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: "Erro no servidor, tente novamente ou verifique seu login!" })
     }
 
