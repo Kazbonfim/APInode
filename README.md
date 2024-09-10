@@ -50,8 +50,8 @@ Esta é uma API desenvolvida em **Node.js** utilizando **Express** como framewor
    Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:
 
    ```bash
-   DATABASE_URL=mongodb://localhost:27017/nome-do-banco
-   JWT_TOKEN=seu_token_sem_aspas_ou_espaços
+   echo 'DATABASE_URL="mongodb+srv://usuario:senha@cluster.mongodb.net/Database?retryWrites=true&w=majority&appName=AppName"
+JWT_SECRET=chave_secreta_aqui' > .env
    ```
 
 4. **Configure seu banco de dados MongoDB**
@@ -82,4 +82,5 @@ Esta é uma API desenvolvida em **Node.js** utilizando **Express** como framewor
    ```
 
    Isso iniciará a aplicação localmente usando **nodemon**, monitorando as mudanças no código e reiniciando automaticamente o servidor sempre que necessário. Lembre-se que é necessário gerar um Token, e aplicar o mesmo em um arquivo '.env' na raíz do projeto, além disso, neste mesmo arquivo você deve definir o link de conexão com o MongoDB.
-   
+
+**Dúvidas? Só entrar em contato através do seguinte e-mail: zcry.games@gmail.com, e ajudarei como for possível. Façam bom uso! 🥰👨‍💻**
