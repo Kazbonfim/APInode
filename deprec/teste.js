@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
 
 // Chave secreta diretamente no código
-const JWT_SECRET = '705958d8ffc36118cb4d0223a5b69c74df3f9a522185a97085f68ac22453a1bb'; 
+const JWT_SECRET = 'TOKEN DE SEGURANÇA AQUI'; 
 
 const auth = (req, res, next) => {
 
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTA2NjVkNTUyMTEyZGM3ZDhjNGMzNyIsImlhdCI6MTcyNTk4MzMxNiwiZXhwIjoxNzI1OTg2OTE2fQ.TwSg_pSbBqVUdk13y2gzwCuu6TWnGUcBDBB-1n-zPI4';
+    const token = 'CHAVE GERADA COM TOKEN AQUI';
 
     try {
 
@@ -13,7 +13,7 @@ const auth = (req, res, next) => {
         console.log('Token válido:', decoded);
         
     } catch (error) {
-        console.error("Carolina, eu quero chorar 😭");
+        console.error("Cristo, eu quero chorar 😭");
     }
 
 };
