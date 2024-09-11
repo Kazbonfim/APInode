@@ -11,13 +11,14 @@
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "express": "^5.0.0",
     "hbs": "^4.2.0",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.2",
     "morgan": "~1.9.1",
     "nodemon": "^3.1.4",
-    "projeto": "file:"
+    "projeto": "file:",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
     "prisma": "^5.19.1"

@@ -3,6 +3,8 @@ var router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
+const { log } = require('debug/src/node');
+const redisClient = require('../middleware/redis');
 
 const prisma = new PrismaClient();
 
@@ -22,6 +24,7 @@ router.post('/cadastro', async (req, res) => {
                 email: user.email,
                 name: user.name,
                 password: hashPassword,
+                position: user.position, // add
             },
         })
 
@@ -55,6 +58,10 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '30m' });
+
+        await redisClient.set(`token:${user.id}`, token, 'EX', 1800);
+
+        console.log(token); // Log de token
 
         res.status(200).json(token);
 
