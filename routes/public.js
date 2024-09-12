@@ -1,21 +1,18 @@
+// Dependências
 var express = require('express');
 var router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
-const { log } = require('debug/src/node');
-const redisClient = require('../middleware/redis');
 
+// Instância do Prisma
 const prisma = new PrismaClient();
-
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Cadastro
 router.post('/cadastro', async (req, res) => {
-
     try {
-        const user = req.body
-
+        const user = req.body;
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(user.password, salt);
 
@@ -24,31 +21,27 @@ router.post('/cadastro', async (req, res) => {
                 email: user.email,
                 name: user.name,
                 password: hashPassword,
-                position: user.position, // add
+                position: user.position,
             },
-        })
+        });
 
-        res.status(201).json(userDB); // Sucesso!
+        res.status(201).json(userDB);
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Erro no servidor, tente novamente." });
     }
-})
+});
 
 // Login
 router.post('/login', async (req, res) => {
-
     try {
         const userInfo = req.body;
-
         const user = await prisma.user.findUnique({
-            where: { email: userInfo.email, },
-        })
-
-        // res.status(200).json(user);
+            where: { email: userInfo.email },
+        });
 
         if (!user) {
-            return res.status(404).json({ message: "Usuário não encontrado, tente novamente ou crie uma conta." })
+            return res.status(404).json({ message: "Usuário não encontrado, tente novamente ou crie uma conta." });
         }
 
         const isMatch = await bcrypt.compare(userInfo.password, user.password);
@@ -59,16 +52,12 @@ router.post('/login', async (req, res) => {
 
         const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '30m' });
 
-        await redisClient.set(`token:${user.id}`, token, 'EX', 1800);
-
-        console.log(token); // Log de token
-
+        console.log(`🔑 ${token}`);
         res.status(200).json(token);
-
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Erro no servidor, tente novamente" })
+        res.status(500).json({ message: "Erro no servidor, tente novamente" });
     }
-})
+});
 
 module.exports = router;

@@ -1,54 +1,51 @@
-require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
+// Configuração de ambiente
+require('dotenv').config();
 
+// Módulos e dependências
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+var fs = require('fs');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const auth = require('./middleware/auth');
-const redisClient = require('./middleware/redis');
 
+// Instância do aplicativo
 var app = express();
 
-// Default
+// Roteadores
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-
-// Rotas
-// Pública - Cadastro & Login
 const publicRoutes = require('./routes/public');
-
-// Privado - Listar Usuários
 const privateRoutes = require('./routes/private');
 
-// view engine setup
+// Configuração da view engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-app.use(logger('dev'));
+// Configuração de logging
+const logFilePath = path.join(__dirname, 'access.log');
+const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
+app.use(logger('dev', { stream: logStream }));
+
+// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/', publicRoutes);
-app.use('/', auth, privateRoutes);
+// Rotas
+app.use('/v1', indexRouter);
+app.use('/v1', publicRoutes);
+app.use('/v2', auth, privateRoutes);
 
-// catch 404 and forward to error handler
+// Tratamento de erros
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
