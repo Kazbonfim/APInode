@@ -5,13 +5,13 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
 // Controladores
-const { UpdateUser, updateUser } = require('../controller/updateUser'); //[1]
+const { updateUser } = require('../controller/updateUser'); //[1]
 
 // Instância do Prisma
 const prisma = new PrismaClient();
 
 // Rotas
-router.get('/listar-usuarios', async (req, res) => {
+router.get('/database', async (req, res) => {
     try {
         const users = await prisma.user.findMany({
             select: {

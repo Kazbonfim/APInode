@@ -1,7 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const fs = require('fs');
 const path = require('path');
-
+const bcrypt = require('bcrypt');
 const prisma = new PrismaClient();
 
 exports.updateUser = async (req, res) => {

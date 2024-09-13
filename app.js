@@ -23,7 +23,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 // Configuração de logging
-const logFilePath = path.join(__dirname, 'access.log');
+const logFilePath = path.join(__dirname, '/log/serverAccess.txt');
 const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
 app.use(logger('dev', { stream: logStream }));
 
