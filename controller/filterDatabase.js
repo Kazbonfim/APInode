@@ -4,15 +4,18 @@ const prisma = new PrismaClient();
 exports.filterDatabase = async (req, res) => {
 
     try {
+        
         let search = [];
         
         if (req.query && (req.query.name || req.query.email || req.query.position)) {
             // Aplica o filtro apenas se houver algum dos parâmetros
             search = await prisma.user.findMany({
                 where: {
-                    name: req.query.name ? req.query.name : undefined,
-                    email: req.query.email ? req.query.email : undefined,
-                    position: req.query.position ? req.query.position : undefined,
+                    AND: [
+                        name ? { name: { contains: name, mode: 'insensitive' } } : {},
+                        email ? { email: { contains: email, mode: 'insensitive' } } : {},
+                        position ? { position: { contains: position, mode: 'insensitive' } } : {},
+                    ],
                 },
                 select: {
                     id: true,
