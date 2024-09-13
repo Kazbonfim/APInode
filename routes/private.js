@@ -5,33 +5,15 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
 // Controladores
-const { updateUser } = require('../controller/updateUser'); //[1]
+const { filterDatabase } = require('../controller/filterDatabase'); // [1]
+const { updateUser } = require('../controller/updateUser'); // [2]
 
 // Instância do Prisma
 const prisma = new PrismaClient();
 
 // Rotas
-router.get('/database', async (req, res) => {
-    try {
-        const users = await prisma.user.findMany({
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                password: true,
-                position: true,
-            }
-        });
+router.get('/database', filterDatabase); // [1]
 
-        console.log(users);
-        res.status(200).json({ message: "Usuários listados com sucesso: ", users });
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Erro no servidor, tente novamente ou verifique seu login!" });
-    }
-});
-
-router.put('/update/:id', updateUser); // [1]
+router.put('/update/:id', updateUser); // [2]
 
 module.exports = router;
