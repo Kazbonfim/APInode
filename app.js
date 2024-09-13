@@ -2,19 +2,19 @@
 require('dotenv').config();
 
 // Módulos e dependências
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var fs = require('fs');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const auth = require('./middleware/auth');
 
 // Instância do aplicativo
-var app = express();
+const app = express();
 
 // Roteadores
-var indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index');
 const publicRoutes = require('./routes/public');
 const privateRoutes = require('./routes/private');
 
@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Rotas
 app.use('/v1', indexRouter);
 app.use('/v1', publicRoutes);
-app.use('/v2', auth, privateRoutes);
+app.use('/v1', auth, privateRoutes);
 
 // Tratamento de erros
 app.use(function (req, res, next) {
