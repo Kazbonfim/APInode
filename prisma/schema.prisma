@@ -20,4 +20,5 @@ model User {
   email   String   @unique
   name    String
   password String
+  position String?
 }

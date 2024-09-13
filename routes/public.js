@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 var express = require('express');
 var router = express.Router();
 const bcrypt = require('bcrypt');
@@ -11,7 +13,10 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // Cadastro
 router.post('/cadastro', async (req, res) => {
 
+    console.log("🚀 Realizando cadastro");
+    
     try {
+        
         const user = req.body
 
         const salt = await bcrypt.genSalt(10);
@@ -22,6 +27,7 @@ router.post('/cadastro', async (req, res) => {
                 email: user.email,
                 name: user.name,
                 password: hashPassword,
+                position: user.position,
             },
         })
 

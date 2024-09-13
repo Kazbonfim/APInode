@@ -18,6 +18,7 @@ router.get('/listar-usuarios', auth, async (req, res) => {
                 name: true, 
                 email: true,
                 password: false,
+                position: true,
             }
         });
 
