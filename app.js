@@ -14,12 +14,18 @@ const auth = require('./middleware/auth');
 const app = express();
 
 // Roteadores
+const indexRouter = require('./routes/index');
 const publicRoutes = require('./routes/public');
 const privateRoutes = require('./routes/private');
 
 // Configuração da view engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+// Configuração de logging
+const logFilePath = path.join(__dirname, '/log/serverAccess.txt');
+const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
+app.use(logger('dev', { stream: logStream }));
 
 // Middlewares
 app.use(express.json());
@@ -28,6 +34,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Rotas
+app.use('/v1', indexRouter);
 app.use('/v1', publicRoutes);
 app.use('/v1', auth, privateRoutes);
 

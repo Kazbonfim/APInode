@@ -13,18 +13,11 @@ exports.userRegister = async (req, res) => {
         const newUser = await prisma.user.create({
             data: {
                 email, // @domain.com
-                name,
+                name, 
                 password: hashedPassword,
                 position, // Admin || User || Visitor
             },
         });
-
-        // Registrar a exclusão em um arquivo de log
-        const logFilePath = path.join(__dirname, '../log/registerLog.txt');
-        const logMessage = `Usuário deletado: ID: ${user.id}, Name: ${user.name}, Email: ${user.email} \n`;
-
-        // Adicionando o log ao arquivo
-        fs.appendFileSync(logFilePath, logMessage);
 
         res.status(201).json(newUser);
     } catch (error) {

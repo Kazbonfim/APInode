@@ -22,13 +22,6 @@ exports.filterDatabase = async (req, res) => {
         // Log para verificar o resultado da busca
         console.log('Resultado da Busca:', search);
 
-        // Registrar a exclusão em um arquivo de log
-        const logFilePath = path.join(__dirname, '../log/filterDatabase.txt');
-        const logMessage = `Usuário deletado: ID: ${user.id}, Name: ${user.name}, Email: ${user.email} \n`;
-
-        // Adicionando o log ao arquivo
-        fs.appendFileSync(logFilePath, logMessage);
-
         res.status(200).json({ message: "Usuários listados com sucesso", users: search });
     } catch (error) {
         // Log para verificar o erro
