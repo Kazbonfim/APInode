@@ -14,7 +14,6 @@ const auth = require('./middleware/auth');
 const app = express();
 
 // Roteadores
-const indexRouter = require('./routes/index');
 const publicRoutes = require('./routes/public');
 const privateRoutes = require('./routes/private');
 
@@ -34,7 +33,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Rotas
-app.use('/v1', indexRouter);
 app.use('/v1', publicRoutes);
 app.use('/v1', auth, privateRoutes);
 
