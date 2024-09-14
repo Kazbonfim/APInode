@@ -23,6 +23,13 @@ exports.userLogin = async (req, res) => {
 
         const token = generateToken({ id: user.id }, JWT_SECRET, { expiresIn: '30m' });
 
+        // Registrar a exclusão em um arquivo de log
+        const logFilePath = path.join(__dirname, '../log/userLogin.txt');
+        const logMessage = `Usuário deletado: ID: ${user.id}, Name: ${user.name}, Email: ${user.email} \n`;
+
+        // Adicionando o log ao arquivo
+        fs.appendFileSync(logFilePath, logMessage);
+
         res.status(200).json({ token });
     } catch (error) {
         console.error(error);
