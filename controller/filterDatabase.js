@@ -3,38 +3,26 @@ const prisma = new PrismaClient();
 
 exports.filterDatabase = async (req, res) => {
     try {
+        
+        console.log(req.query);
+
         let search = [];
 
-        if (req.query && (req.query.username || req.query.email || req.query.position)) {
-            // Aplica o filtro apenas se houver algum dos parâmetros
+        if (req.query) {
             search = await prisma.user.findMany({
                 where: {
-                    AND: [
-                        req.query.username ? { username: { contains: req.query.username, mode: 'insensitive' } } : {},
-                        req.query.email ? { email: { contains: req.query.email, mode: 'insensitive' } } : {},
-                        req.query.position ? { position: { contains: req.query.position, mode: 'insensitive' } } : {},
-                    ],
-                },
-                select: {
-                    id: true,
-                    username: true,
-                    email: true,
-                    position: true,
+                    name: req.query.name || undefined,
+                    email: req.query.email || undefined,
+                    id: req.query.id || undefined,
+                    position: req.query.position || undefined,
                 }
             });
-        } else {
-            // Se não houver filtros, retorna todos os usuários
-            search = await prisma.user.findMany({
-                select: {
-                    id: true,
-                    username: true,
-                    email: true,
-                    position: true,
-                }
-            });
-        }
 
-        console.log(req.query);  // Verificando o que está sendo passado via query string
+        } else {
+            search = await prisma.user.findMany()
+        };
+
+        console.log('Resultado de sua busca', search);
 
         res.status(200).json({ message: "Usuários listados com sucesso", users: search });
 

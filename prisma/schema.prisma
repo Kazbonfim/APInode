@@ -14,11 +14,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Modelo de cadastro, obrigatório usar o padrão JSON
 // Schema
 model User {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId // ID, único
   email   String   @unique // E-mail, único
   name    String // Nome
   password String // Senha
-  position String? // Cargo, opcional
+  position posOptions // Cargo, opcional
 }
+
+enum posOptions {
+  Admin
+  User
+  Visitor
+}
+
