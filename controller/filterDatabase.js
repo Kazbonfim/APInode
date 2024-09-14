@@ -1,5 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const fs = require('fs');
+const path = require('path');
 
 exports.filterDatabase = async (req, res) => {
     try {
@@ -21,6 +23,13 @@ exports.filterDatabase = async (req, res) => {
 
         // Log para verificar o resultado da busca
         console.log('Resultado da Busca:', search);
+
+        // Registrar a atualização em um arquivo de log
+        const logFilePath = path.join(__dirname, '../log/searchLog.txt');
+        const logMessage = `Usuário atualizado: ID: ${req.params.id}, Name: ${name}, Email: ${email}, Posição: ${position} \n`;
+
+        // Adicionando o log ao arquivo
+        fs.appendFileSync(logFilePath, logMessage);
 
         res.status(200).json({ message: "Usuários listados com sucesso", users: search });
     } catch (error) {

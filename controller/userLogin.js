@@ -1,6 +1,8 @@
 const { hashPassword, comparePassword, generateToken } = require('../utils/config');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const fs = require('fs');
+const path = require('path');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret'; // Default para evitar erros se a variável não estiver definida
 
@@ -22,6 +24,13 @@ exports.userLogin = async (req, res) => {
         }
 
         const token = generateToken({ id: user.id }, JWT_SECRET, { expiresIn: '30m' });
+
+        // Registrar a atualização em um arquivo de log
+        const logFilePath = path.join(__dirname, '../log/userLogin.txt');
+        const logMessage = `Usuário atualizado: ID: ${req.params.id}, Name: ${name}, Email: ${email}, Posição: ${position} \n`;
+
+        // Adicionando o log ao arquivo
+        fs.appendFileSync(logFilePath, logMessage);
 
         res.status(200).json({ token });
     } catch (error) {
