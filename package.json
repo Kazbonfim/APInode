@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node http://localhost:3000 ./bin/www",
-    "dev": "npx nodemon http://localhost:3000 ./bin/www"
+    "start": "nodemon http://localhost:3000 ./bin/www"
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",
@@ -17,7 +16,9 @@
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.2",
     "morgan": "~1.9.1",
-    "projeto": "file:"
+    "nodemon": "^3.1.4",
+    "projeto": "file:",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
     "prisma": "^5.19.1"
