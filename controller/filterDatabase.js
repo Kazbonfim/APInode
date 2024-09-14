@@ -3,31 +3,30 @@ const prisma = new PrismaClient();
 
 exports.filterDatabase = async (req, res) => {
     try {
-        
-        console.log(req.query);
+        // Log para verificar os query params recebidos
+        console.log('Query Params:', req.query);
 
-        let search = [];
+        // Preparar filtros com base nos query params
+        const filters = {};
 
-        if (req.query) {
-            search = await prisma.user.findMany({
-                where: {
-                    name: req.query.name || undefined,
-                    email: req.query.email || undefined,
-                    id: req.query.id || undefined,
-                    position: req.query.position || undefined,
-                }
-            });
+        if (req.query.name) filters.name = { contains: req.query.name, mode: 'insensitive' };
+        if (req.query.email) filters.email = { contains: req.query.email, mode: 'insensitive' };
+        if (req.query.id) filters.id = req.query.id; // Supondo que id seja uma string ou número exato
+        if (req.query.position) filters.position = { contains: req.query.position, mode: 'insensitive' };
 
-        } else {
-            search = await prisma.user.findMany()
-        };
+        // Buscar usuários com base nos filtros
+        const search = await prisma.user.findMany({
+            where: filters,
+        });
 
-        console.log('Resultado de sua busca', search);
+        // Log para verificar o resultado da busca
+        console.log('Resultado da Busca:', search);
 
         res.status(200).json({ message: "Usuários listados com sucesso", users: search });
-
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Erro no servidor, tente novamente ou verifique seu login!" });
+        // Log para verificar o erro
+        console.error('Erro:', error);
+
+        res.status(500).json({ message: "Ocorreu algum erro! Verifique sua busca e tente novamente" });
     }
 };
