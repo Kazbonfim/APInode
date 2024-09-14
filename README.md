@@ -1,4 +1,3 @@
-Aqui está a versão ajustada conforme solicitado:
 
 ## NodeAPI 🎯 Sobre o projeto 👨‍💻
 ***
