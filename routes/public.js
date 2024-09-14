@@ -1,33 +1,31 @@
 // Dependências
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const { hashPassword, comparePassword, generateToken } = require('../utils/config');
 const { PrismaClient } = require('@prisma/client');
 
 // Instância do Prisma
 const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || 'default_secret'; // Default para evitar erros se a variável não estiver definida
 
 // Cadastro
 router.post('/cadastro', async (req, res) => {
     try {
-        const user = req.body;
-        const salt = await bcrypt.genSalt(10);
-        const hashPassword = await bcrypt.hash(user.password, salt);
+        const { email, name, password, position } = req.body; // Desestruturação do corpo da requisição
+        const hashedPassword = await hashPassword(password);
 
-        const userDB = await prisma.user.create({
+        const newUser = await prisma.user.create({
             data: {
-                email: user.email,
-                name: user.name,
-                password: hashPassword,
-                position: user.position,
+                email,
+                name,
+                password: hashedPassword,
+                position,
             },
         });
 
-        res.status(201).json(userDB);
+        res.status(201).json(newUser);
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({ message: "Erro no servidor, tente novamente." });
     }
 });
@@ -35,28 +33,27 @@ router.post('/cadastro', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
     try {
-        const userInfo = req.body;
+        const { email, password } = req.body; // Desestruturação do corpo da requisição
         const user = await prisma.user.findUnique({
-            where: { email: userInfo.email },
+            where: { email },
         });
 
         if (!user) {
             return res.status(404).json({ message: "Usuário não encontrado, tente novamente ou crie uma conta." });
         }
 
-        const isMatch = await bcrypt.compare(userInfo.password, user.password);
+        const isMatch = await comparePassword(password, user.password);
 
         if (!isMatch) {
             return res.status(400).json({ message: "Senha inválida." });
         }
 
-        const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '30m' });
+        const token = generateToken({ id: user.id }, JWT_SECRET, { expiresIn: '30m' });
 
-        console.log(`🔑 ${token}`);
-        res.status(200).json(token);
+        res.status(200).json({ token });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Erro no servidor, tente novamente" });
+        console.error(error);
+        res.status(500).json({ message: "Erro no servidor, tente novamente." });
     }
 });
 
