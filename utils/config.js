@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const saltRounds = 10; // Configure o número de rounds para o bcrypt
+const saltRounds = 10; // Criptografia de senhas, antes de enviar ao DB
 
 // Funções utilitárias de segurança
 const generateToken = (payload, secret, options) => {
