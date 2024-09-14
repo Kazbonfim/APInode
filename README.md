@@ -77,7 +77,7 @@ JWT_SECRET=chave_secreta_aqui' > .env
    Inicie a aplicação com o comando:
 
    ```bash
-   npm start
+   npm rum dev
    ```
 
    Isso iniciará a aplicação localmente usando **nodemon**, monitorando as mudanças no código e reiniciando automaticamente o servidor sempre que necessário. Lembre-se que é necessário gerar um Token, e aplicar o mesmo em um arquivo '.env' na raíz do projeto, além disso, neste mesmo arquivo você deve definir o link de conexão com o MongoDB.
