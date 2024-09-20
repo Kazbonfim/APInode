@@ -26,7 +26,7 @@ exports.filterDatabase = async (req, res) => {
 
         // Registrar a atualização em um arquivo de log
         const logFilePath = path.join(__dirname, '../log/searchLog.txt');
-        const logMessage = `Usuário atualizado: ID: ${req.params.id}, Name: ${name}, Email: ${email}, Posição: ${position} \n`;
+        const logMessage = `Usuário atualizado: ID: ${req.params.id}, Name: ${req.params.name}, Email: ${req.params.email}, Posição: ${req.params.position} \n`;
 
         // Adicionando o log ao arquivo
         fs.appendFileSync(logFilePath, logMessage);
